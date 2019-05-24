@@ -2,11 +2,11 @@ package main
 
 import (
 	"bufio"
-	"log"
-	"os"
-	"math/rand"
-	"time"
 	"fmt"
+	"log"
+	"math/rand"
+	"os"
+	"time"
 )
 
 // Each index is the str for a sequentially greater guess
@@ -70,12 +70,10 @@ func getRandomWord() string{
 }
 
 func main() {
-	// Game variables
 	numIncorrectGuesses := 0
-	var pastGuesses [26]int
-	badGuesses := "Letters not in the secret word: "
+	var pastGuesses [26]int // 0 for not guessed, else 1 for guessed
+	badGuesses := "Letters not in the secret word: " // Invalid guesses
 	randomWord := getRandomWord()
-	fmt.Println(randomWord)
 	// Initialize user guess to underscores
 	guessWord := ""
 	for i := 0; i < len(randomWord); i++{
@@ -123,11 +121,10 @@ func main() {
 					fmt.Println(hangmanBodyArr[numIncorrectGuesses])
 					fmt.Println(badGuesses)
 					fmt.Println("Secret word: " + guessWord)
-					if(numIncorrectGuesses == len(hangmanBodyArr) + 1){ // Is user out of guesses?
-						fmt.Println("Game over.")
+					if(numIncorrectGuesses == len(hangmanBodyArr)-1){ // Is user out of guesses?
+						fmt.Println("Game over. Rest in peace, my guy.")
 						break
 					}
-
 				}
 			} else{
 				fmt.Println("You have already guessed the letter '" + guess + "'!")
@@ -136,5 +133,4 @@ func main() {
 			fmt.Println("Guess a lowercase letter in the alphabet: ")
 		}
 	}
-
 }
