@@ -10,7 +10,8 @@ import (
 )
 
 // Each index is the str for a sequentially greater guess
-var hangmanBodyArr = [6]string{ "___ \n|  | \n|  O\n| \n| \n|____",
+var hangmanBodyArr = [7]string{ "___ \n|  | \n|   \n| \n| \n|____",
+								"___ \n|  | \n|  O\n| \n| \n|____",
 								"___ \n|  | \n|  O\n|  |\n| \n|____",
 								"___ \n|  | \n|  O\n| /|\n| \n|____",
 								"___ \n|  | \n|  O\n| /|\\\n| \n|____",
@@ -70,17 +71,26 @@ func getRandomWord() string{
 
 func main() {
 	// Game variables
-	randomWord := getRandomWord()
-	letterMap := getLetterMap(randomWord)
 	numIncorrectGuesses := 0
 	var pastGuesses [26]int
+	badGuesses := "Letters not in the secret word: "
+	randomWord := getRandomWord()
+	fmt.Println(randomWord)
 	// Initialize user guess to underscores
 	guessWord := ""
 	for i := 0; i < len(randomWord); i++{
 		guessWord += "_ "
 	}
-	fmt.Println(randomWord)
+	guessWord = guessWord[:len(guessWord)-1]
+	// add spaces to randomWord to correspond to underscores in guessword
+	tmp := ""
+	for i := 0; i < len(randomWord); i++{
+		tmp += string(randomWord[i]) + " "
+	}
+	randomWord = tmp[:len(tmp)-1]
+	letterMap := getLetterMap(randomWord)
 	fmt.Println("")
+	fmt.Println(hangmanBodyArr[numIncorrectGuesses])
 	fmt.Println("The secret word: " + guessWord)
 	fmt.Println("Guess a lowercase letter in the alphabet: ")
 	// While user input is incorrect and user still has guesses
@@ -89,13 +99,7 @@ func main() {
 		reader := bufio.NewReader(os.Stdin)
 		guess, _ := reader.ReadString('\n')
 		fmt.Println("")
-		guess = string(guess[0]) // Get rid of the delimiter
-		// add underscores to guess
-		tmp := ""
-		for i := 0; i < len(guess); i++{
-			tmp += string(guess[i]) + "_"
-		}
-		guess = tmp[:len(tmp)-1]
+		guess = string(guess[:len(guess)-2]) // Get rid of the delimiter
 		guessIndex := guess[0]-'a'
 		if len(guess) == 1 && guessIndex >= 0 && guessIndex <= 25{ // Valid guess
 			if pastGuesses[guessIndex] == 0 { // If new guess
@@ -114,9 +118,12 @@ func main() {
 					}
 				} else{ // Incorrect guess
 					numIncorrectGuesses++;
+					badGuesses += guess + " "
 					fmt.Println("Uh-oh! The letter '" + guess + "' is not in the secret word.")
-					fmt.Println(hangmanBodyArr[numIncorrectGuesses - 1])
-					if(numIncorrectGuesses == len(hangmanBodyArr)){ // Is user out of guesses?
+					fmt.Println(hangmanBodyArr[numIncorrectGuesses])
+					fmt.Println(badGuesses)
+					fmt.Println("Secret word: " + guessWord)
+					if(numIncorrectGuesses == len(hangmanBodyArr) + 1){ // Is user out of guesses?
 						fmt.Println("Game over.")
 						break
 					}
@@ -126,7 +133,7 @@ func main() {
 				fmt.Println("You have already guessed the letter '" + guess + "'!")
 			}
 		} else{
-			fmt.Println("Guess a lowercase letter in the alphabet.")
+			fmt.Println("Guess a lowercase letter in the alphabet: ")
 		}
 	}
 
