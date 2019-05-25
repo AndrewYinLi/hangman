@@ -122,7 +122,7 @@ func main() {
 					fmt.Println(badGuesses)
 					fmt.Println("Secret word: " + guessWord)
 					if(numIncorrectGuesses == len(hangmanBodyArr)-1){ // Is user out of guesses?
-						fmt.Println("Game over. Rest in peace, my guy.")
+						fmt.Println("Game over. The secret word was: " + randomWord)
 						break
 					}
 				}
