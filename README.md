@@ -7,4 +7,6 @@ ___
 
 `$ git clone https://github.com/AndrewYinLi/hangman.git`
 
-`$ git clone punch reset`
+`$ cd hangman`
+
+`$ go run main.go`
